@@ -26,6 +26,9 @@ test.describe('Capture screenshots of pre-prod pages', () => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.goto(pageInfo.url);
 
+        
+        await page.waitForTimeout(2000);
+
         const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
         await page.screenshot({ path: screenshotPath, fullPage: true });
         console.log(`Captured screenshot of ${pageInfo.name} at ${viewport.name} size`);
