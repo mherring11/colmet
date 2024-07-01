@@ -18,6 +18,7 @@ async function takeDesktopScreenshots(page) {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
   await page.goto(fileUrl);
+  await page.waitForTimeout(2000);
 
   const imageSelectors = [
     { selector: '#Homepage', name: 'Homepage' },
@@ -75,8 +76,7 @@ async function capturePreProdScreenshots(page) {
 
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(pageInfo.url);
-
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(2000); 
 
       const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
@@ -85,6 +85,7 @@ async function capturePreProdScreenshots(page) {
   }
 }
 
+// Third, define the function to compare screenshots with provided images
 async function compareScreenshotsWithProvidedImages() {
   const pagesToCompare = [
     {
