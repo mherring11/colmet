@@ -6,48 +6,53 @@ const pixelmatch = require('pixelmatch');
 const sharp = require('sharp');
 const jpeg = require('jpeg-js');
 
+const browserWidths = [320, 480, 768, 1024, 1366, 1440];
+
 // Test 1: Take screenshots of images from the mobile view
-test.describe('Full Mobile Test Suite', () => {
+test.describe('Full Mobile Test Suite - Varying Widths', () => {
   test('Take screenshots of images from the mobile view', async ({ page }) => {
     const htmlPath = path.resolve(__dirname, '..', 'index_mobile.html');
     const fileUrl = `file://${htmlPath}`;
 
-    const screenshotsDir = path.resolve(__dirname, '..', 'mobile_screenshots');
-    if (!fs.existsSync(screenshotsDir)) {
-      fs.mkdirSync(screenshotsDir);
-    }
+    for (const width of browserWidths) {
+      const screenshotsDir = path.resolve(__dirname, '..', 'mobile_screenshots', `width_${width}`);
+      if (!fs.existsSync(screenshotsDir)) {
+        fs.mkdirSync(screenshotsDir, { recursive: true });
+      }
 
-    await page.goto(fileUrl);
+      await page.setViewportSize({ width, height: 667 });
+      await page.goto(fileUrl);
 
-    const imageSelectors = [
-      { selector: '#Homepage', name: 'Homepage_mobile' },
-      { selector: '#Category_Landing_Page', name: 'Category_Landing_Page_mobile' },
-      { selector: '#Product_Page', name: 'Product_mobile' },
-      { selector: '#Product_Page_New', name: 'Product_Page_New_mobile' },
-      { selector: '#About_Us', name: 'About_Us_mobile' },
-      { selector: '#Blog_List', name: 'Blog_List_mobile' },
-      { selector: '#Blog_Post', name: 'Blog_Post_mobile' },
-      { selector: '#Search_Results', name: 'Search_Results_mobile' },
-      { selector: '#Photo_Gallery', name: 'Photo_Gallery_mobile' },
-      { selector: '#Privacy_Patents_Terms', name: 'Privacy_Patents_Terms_mobile' },
-      { selector: '#Estimator_Bot', name: 'Estimator_Bot_mobile' },
-      { selector: '#Estimator_Bot_Modal', name: 'Estimator_Bot_Modal_mobile' },
-      { selector: '#Filter', name: 'Filter_mobile' },
-      { selector: '#Product', name: 'Product_mobile' },
-      { selector: '#Cart', name: 'Cart_mobile' },
-      { selector: '#Checkout', name: 'Checkout_mobile' },
-      { selector: '#Confirmation', name: 'Confirmation_mobile' },
-      { selector: '#Order_Status', name: 'Order_Status_mobile' },
-    ];
+      const imageSelectors = [
+        { selector: '#Homepage', name: 'Homepage_mobile' },
+        { selector: '#Category_Landing_Page', name: 'Category_Landing_Page_mobile' },
+        { selector: '#Product_Page', name: 'Product_mobile' },
+        { selector: '#Product_Page_New', name: 'Product_Page_New_mobile' },
+        { selector: '#About_Us', name: 'About_Us_mobile' },
+        { selector: '#Blog_List', name: 'Blog_List_mobile' },
+        { selector: '#Blog_Post', name: 'Blog_Post_mobile' },
+        { selector: '#Search_Results', name: 'Search_Results_mobile' },
+        { selector: '#Photo_Gallery', name: 'Photo_Gallery_mobile' },
+        { selector: '#Privacy_Patents_Terms', name: 'Privacy_Patents_Terms_mobile' },
+        { selector: '#Estimator_Bot', name: 'Estimator_Bot_mobile' },
+        { selector: '#Estimator_Bot_Modal', name: 'Estimator_Bot_Modal_mobile' },
+        { selector: '#Filter', name: 'Filter_mobile' },
+        { selector: '#Product', name: 'Product_mobile' },
+        { selector: '#Cart', name: 'Cart_mobile' },
+        { selector: '#Checkout', name: 'Checkout_mobile' },
+        { selector: '#Confirmation', name: 'Confirmation_mobile' },
+        { selector: '#Order_Status', name: 'Order_Status_mobile' },
+      ];
 
-    for (let i = 0; i < imageSelectors.length; i++) {
-      const { selector, name } = imageSelectors[i];
-      const element = await page.$(selector);
-      if (element) {
-        await element.screenshot({ path: path.resolve(screenshotsDir, `${name}.png`) });
-        console.log(`Screenshot of ${name} captured.`);
-      } else {
-        console.log(`Element with selector ${selector} not found.`);
+      for (let i = 0; i < imageSelectors.length; i++) {
+        const { selector, name } = imageSelectors[i];
+        const element = await page.$(selector);
+        if (element) {
+          await element.screenshot({ path: path.resolve(screenshotsDir, `${name}.png`) });
+          console.log(`Screenshot of ${name} at width ${width} captured.`);
+        } else {
+          console.log(`Element with selector ${selector} not found.`);
+        }
       }
     }
   });
@@ -68,25 +73,27 @@ test.describe('Full Mobile Test Suite', () => {
   test.describe('Capture screenshots of pre-prod pages in mobile view', () => {
     for (const pageInfo of pagesToCapture) {
       for (const viewport of mobileViewports) {
-        test(`Capture screenshot of ${pageInfo.name} at ${viewport.name} size`, async ({ page }) => {
-          const baseDir = path.resolve(__dirname, '..', 'mobile_screenshots');
-          const screenshotsDir = path.resolve(baseDir, `${pageInfo.name}_${viewport.name}`);
-          if (!fs.existsSync(baseDir)) {
-            fs.mkdirSync(baseDir, { recursive: true });
-          }
-          if (!fs.existsSync(screenshotsDir)) {
-            fs.mkdirSync(screenshotsDir, { recursive: true });
-          }
+        for (const width of browserWidths) {
+          test(`Capture screenshot of ${pageInfo.name} at ${viewport.name} size and width ${width}`, async ({ page }) => {
+            const baseDir = path.resolve(__dirname, '..', 'mobile_screenshots', `width_${width}`);
+            const screenshotsDir = path.resolve(baseDir, `${pageInfo.name}_${viewport.name}`);
+            if (!fs.existsSync(baseDir)) {
+              fs.mkdirSync(baseDir, { recursive: true });
+            }
+            if (!fs.existsSync(screenshotsDir)) {
+              fs.mkdirSync(screenshotsDir, { recursive: true });
+            }
 
-          await page.setViewportSize({ width: viewport.width, height: viewport.height });
-          await page.goto(pageInfo.url);
+            await page.setViewportSize({ width, height: viewport.height });
+            await page.goto(pageInfo.url);
 
-          await page.waitForTimeout(2000);
+            await page.waitForTimeout(2000);
 
-          const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
-          await page.screenshot({ path: screenshotPath, fullPage: true });
-          console.log(`Captured screenshot of ${pageInfo.name} at ${viewport.name} size`);
-        });
+            const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
+            await page.screenshot({ path: screenshotPath, fullPage: true });
+            console.log(`Captured screenshot of ${pageInfo.name} at ${viewport.name} size and width ${width}`);
+          });
+        }
       }
     }
   });
