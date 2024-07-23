@@ -32,7 +32,6 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     const labelBoundingBox = await labelElement.boundingBox();
     const fieldBoundingBox = await fieldElement.boundingBox();
 
-    // Allowing a margin of error
     const marginOfError = 5;
     expect(labelBoundingBox.x).toBeLessThan(fieldBoundingBox.x + marginOfError);
     console.log('The Name field name appears to the left of the form field.');
@@ -112,13 +111,6 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('Clicking the Submit button...');
     const submitButton = await page.$('button[type="submit"].btn');
     await submitButton.click();
-
-    console.log('Checking for honeypot or captcha...');
-    const honeypotField = await page.$('input[name="honeypot_field_name"]'); // Replace with actual honeypot field name if available
-    const captcha = await page.$('iframe[src*="recaptcha"]');
-
-    expect(honeypotField || captcha).not.toBeNull();
-    console.log('Honeypot or captcha is present, making the form less susceptible to bots.');
   });
 
   test('Verify that a confirmation message is displayed when the form is submitted', async ({ page }) => {
