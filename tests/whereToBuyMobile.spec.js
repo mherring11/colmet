@@ -69,6 +69,38 @@ test.describe('Where to Buy Mobile - Automated', () => {
     console.log('"No results found" message confirmed.');
   });
 
+  test('Verify that the ZIP code field only accepts numbers and up to 5 characters total', async ({ page }) => {
+    console.log('Navigating to the Where to Buy page...');
+    await page.goto('https://colmet-prd.chltest2.com/where-to-buy');
+
+    console.log('Filling the ZIP code field with an invalid value "12345a"...');
+    const zipCodeField = await page.$('input[id="zipCode"]');
+    await zipCodeField.fill('12345a');
+
+    console.log('Submitting the form...');
+    const searchButton = await page.$('button[type="submit"].btn');
+    await searchButton.click();
+
+    console.log('Checking the ZIP code field value...');
+    const zipCodeValue = await zipCodeField.inputValue();
+    expect(zipCodeValue).toBe('12345');
+
+    console.log('Filling the ZIP code field with a valid value "12345"...');
+    await zipCodeField.fill('12345');
+
+    console.log('Submitting the form...');
+    await searchButton.click();
+
+    console.log('Waiting for store addresses or "No results found" message...');
+    const storeAddresses = await page.waitForSelector('div.stores div[id^="store-"], p:has-text("No results found")', { timeout: 10000 });
+
+    if (storeAddresses) {
+      console.log('Store addresses or "No results found" message found.');
+    } else {
+      console.log('Neither store addresses nor "No results found" message found.');
+    }
+  });
+
   test('Verify store addresses are displayed and clickable for a valid ZIP code', async ({ page }) => {
     console.log('Navigating to the Where to Buy page...');
     await page.goto('https://colmet-prd.chltest2.com/where-to-buy');
