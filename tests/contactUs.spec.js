@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Contact Us Form - Required Fields Check', () => {
 
-  test('Verify that required fields are indicated with an asterisk', async ({ page }) => {
+  test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -19,6 +19,11 @@ test.describe('Contact Us Form - Required Fields Check', () => {
       expect(asterisk).not.toBeNull();
       console.log(`${field.label} field is marked as required.`);
     }
+
+    console.log('Verifying that "* Indicates a required field" text is present...');
+    const requiredFieldText = await page.$('label:has-text("* Indicates a required field.")');
+    expect(requiredFieldText).not.toBeNull();
+    console.log('"* Indicates a required field" text is present.');
   });
 
   test('Verify that the Name field name appears to the left of the form field', async ({ page }) => {
