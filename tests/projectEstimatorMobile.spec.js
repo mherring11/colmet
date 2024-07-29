@@ -1,9 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
+test.use({ viewport: { width: 375, height: 812 } }); // iPhone X dimensions
+
 test.describe('Project Estimator - Form Check', () => {
   test('Verify that the project estimator can be accessed globally by clicking the Project Estimator button', async ({ page }) => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
+
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
 
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
@@ -20,6 +25,9 @@ test.describe('Project Estimator - Form Check', () => {
   test('Verify that the product selector drop-down contains the required options', async ({ page }) => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
+
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
 
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
@@ -52,6 +60,9 @@ test.describe('Project Estimator - Form Check', () => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
 
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
+
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
 
@@ -73,6 +84,9 @@ test.describe('Project Estimator - Form Check', () => {
   test('Verify that the Calculate button is enabled when the project distance is populated', async ({ page }) => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
+
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
 
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
@@ -114,6 +128,9 @@ test.describe('Project Estimator - Form Check', () => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
 
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
+
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
 
@@ -154,6 +171,9 @@ test.describe('Project Estimator - Form Check', () => {
   test('Verify that the Project Estimator modal can be closed by clicking the X button', async ({ page }) => {
     console.log('Navigating to the home page...');
     await page.goto('https://colmet-prd.chltest2.com/');
+
+    console.log('Clicking the navigation toggle button...');
+    await page.click('button.Header_nav-toggle__j4Yq8');
 
     console.log('Clicking the Project Estimator button...');
     await page.click('.estimator-btn-container .btn');
