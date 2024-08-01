@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test.use({ viewport: { width: 375, height: 812 } }); // iPhone X dimensions
+test.use({ viewport: { width: 375, height: 812 } });
 
 test.describe('Project Estimator - Form Check', () => {
   test('Verify that the project estimator can be accessed globally by clicking the Project Estimator button', async ({ page }) => {
