@@ -7,7 +7,6 @@ const sharp = require('sharp');
 
 const browserWidths = [320, 480, 768, 1024, 1366, 1440];
 
-// First, define the function to take screenshots of the desktop images
 async function takeDesktopScreenshots(page) {
   const htmlPath = path.resolve(__dirname, '..', 'index.html');
   const fileUrl = `file://${htmlPath}`;
@@ -56,7 +55,6 @@ async function takeDesktopScreenshots(page) {
   }
 }
 
-// Second, define the function to capture screenshots of the pre-prod pages
 async function capturePreProdScreenshots(page) {
   const pagesToCapture = [
     { url: 'https://colmet-prd.chltest2.com/', name: 'Homepage' },
@@ -82,7 +80,6 @@ async function capturePreProdScreenshots(page) {
   }
 }
 
-// Third, define the function to compare screenshots with provided images
 async function compareScreenshotsWithProvidedImages() {
   const pagesToCompare = [
     {
@@ -118,7 +115,6 @@ async function compareScreenshotsWithProvidedImages() {
     console.log('Provided Image Path:', providedImagePath);
     console.log('Website Screenshot Path:', websiteScreenshotPath);
 
-    // Ensure the screenshots and diffs directories exist
     if (!fs.existsSync(screenshotsDir)) {
       fs.mkdirSync(screenshotsDir);
     }

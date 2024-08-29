@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Contact Us Form - Required Fields Check', () => {
-  test.use({ viewport: { width: 375, height: 812 } }); // iPhone X dimensions
-
+  test.use({ viewport: { width: 375, height: 812 } }); 
+  
   test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');

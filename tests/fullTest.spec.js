@@ -5,7 +5,6 @@ const PNG = require('pngjs').PNG;
 const pixelmatch = require('pixelmatch');
 const sharp = require('sharp');
 
-// First, define the function to take screenshots of the desktop images
 async function takeDesktopScreenshots(page) {
   const htmlPath = path.resolve(__dirname, '..', 'index.html');
   const fileUrl = `file://${htmlPath}`;
@@ -53,7 +52,6 @@ async function takeDesktopScreenshots(page) {
   }
 }
 
-// Second, define the function to capture screenshots of the pre-prod pages
 async function capturePreProdScreenshots(page) {
   const pagesToCapture = [
     { url: 'https://colmet-prd.chltest2.com/', name: 'Homepage' },
@@ -85,7 +83,6 @@ async function capturePreProdScreenshots(page) {
   }
 }
 
-// Third, define the function to compare screenshots with provided images
 async function compareScreenshotsWithProvidedImages() {
   const pagesToCompare = [
     {
@@ -121,7 +118,6 @@ async function compareScreenshotsWithProvidedImages() {
     console.log('Provided Image Path:', providedImagePath);
     console.log('Website Screenshot Path:', websiteScreenshotPath);
 
-    // make sure the screenshots and diffs directories exist
     if (!fs.existsSync(screenshotsDir)) {
       fs.mkdirSync(screenshotsDir);
     }
@@ -129,7 +125,6 @@ async function compareScreenshotsWithProvidedImages() {
       fs.mkdirSync(diffsDir);
     }
 
-    // Check if the images and website screenshot exist
     if (!fs.existsSync(providedImagePath)) {
       console.log(`Provided image not found at ${providedImagePath}`);
       return;
@@ -139,11 +134,9 @@ async function compareScreenshotsWithProvidedImages() {
       return;
     }
 
-    // Read the provided image
     const providedImage = PNG.sync.read(fs.readFileSync(providedImagePath));
     const { width: providedWidth, height: providedHeight } = providedImage;
 
-    // Read the website screenshot and resize if necessary
     const websiteImageBuffer = fs.readFileSync(websiteScreenshotPath);
     const websiteImageResizedBuffer = await sharp(websiteImageBuffer)
       .resize(providedWidth, providedHeight)
@@ -157,14 +150,12 @@ async function compareScreenshotsWithProvidedImages() {
 
     const numDiffPixels = pixelmatch(providedImage.data, websiteImage.data, diff.data, width, height, { threshold: 0.05 });
 
-    // Save the diff image
     fs.writeFileSync(diffImagePath, PNG.sync.write(diff));
 
     console.log(`Number of different pixels for ${pageInfo.name}: ${numDiffPixels}`);
   }
 }
 
-// Combine all tests into a single test 
 test.describe('Combined Test Suite', () => {
   test('Run full test sequence', async ({ page }) => {
     console.log('Running desktop screenshot tests...');

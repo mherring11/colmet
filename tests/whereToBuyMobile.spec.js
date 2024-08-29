@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Where to Buy Mobile - Automated', () => {
-  test.use({ viewport: { width: 375, height: 812 } }); // iPhone X dimensions
+  test.use({ viewport: { width: 375, height: 812 } }); 
 
   test('Verify the Where to Buy form displays the required elements', async ({ page }) => {
     console.log('Navigating to the Where to Buy page...');

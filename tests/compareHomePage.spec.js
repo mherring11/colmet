@@ -42,7 +42,6 @@ test.describe('Compare existing screenshots with provided images', () => {
       console.log('Provided Image Path:', providedImagePath);
       console.log('Website Screenshot Path:', websiteScreenshotPath);
 
-      // Ensure the screenshots and diffs directories exist
       if (!fs.existsSync(screenshotsDir)) {
         fs.mkdirSync(screenshotsDir);
       }

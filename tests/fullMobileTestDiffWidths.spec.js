@@ -8,7 +8,6 @@ const jpeg = require('jpeg-js');
 
 const browserWidths = [320, 480, 768, 1024, 1366, 1440];
 
-// Test 1: Take screenshots of images from the mobile view
 test.describe('Full Mobile Test Suite - Varying Widths', () => {
   test('Take screenshots of images from the mobile view', async ({ page }) => {
     const htmlPath = path.resolve(__dirname, '..', 'index_mobile.html');
@@ -98,7 +97,6 @@ test.describe('Full Mobile Test Suite - Varying Widths', () => {
     }
   });
 
-  // Test 3: Compare mobile screenshots with provided mobile images
   const pagesToCompare = [
     {
       name: 'Homepage',
@@ -150,7 +148,6 @@ test.describe('Full Mobile Test Suite - Varying Widths', () => {
         console.log('Provided Image Path:', providedImagePath);
         console.log('Website Screenshot Path:', websiteScreenshotPath);
 
-        // Ensure the screenshots and diffs directories exist
         if (!fs.existsSync(baseDir)) {
           fs.mkdirSync(baseDir);
         }

@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
 
-// Set the viewport for mobile testing
 test.use({ viewport: { width: 375, height: 812 } });
 
 test.describe('Online Store Landing Page Tests', () => {
