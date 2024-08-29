@@ -235,7 +235,7 @@ test.describe('Online Store Detail Pages Tests', () => {
     const quantityInputSelector = 'input[type="number"]';
     const addToCartButtonSelector = 'button.btn';
     const cartQuantitySelector = 'span.ml-2.text-sm.font-medium.text-yellow.lg\\:text-white.lg\\:group-hover\\:text-white\\/75';
-    const cartIconSelector = 'li.hidden.lg\\:flex a[href="/cart"]'; // Selector for the cart icon link
+    const cartIconSelector = 'li.hidden.lg\\:flex a[href="/cart"]'; 
 
     console.log('Incrementing quantity to 3...');
     for (let increment = 1; increment <= 3; increment++) {

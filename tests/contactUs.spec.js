@@ -1,8 +1,25 @@
 const { test, expect } = require('@playwright/test');
 
+let browser;
+let context;
+
 test.describe('Contact Us Form - Required Fields Check', () => {
 
-  test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async ({ page }) => {
+  test.beforeAll(async () => {
+  
+    browser = await require('playwright').chromium.launch({
+      headless: false,
+      args: ['--disable-features=BlockThirdPartyCookies'],
+    });
+
+    context = await browser.newContext();
+  });
+
+  test.afterAll(async () => {
+  });
+
+  test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -26,7 +43,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('"* Indicates a required field" text is present.');
   });
 
-  test('Verify that the Name field name appears to the left of the form field', async ({ page }) => {
+  test('Verify that the Name field name appears to the left of the form field', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -42,7 +60,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('The Name field name appears to the left of the form field.');
   });
 
-  test('Verify that the form contains validation messages for required fields', async ({ page }) => {
+  test('Verify that the form contains validation messages for required fields', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -67,7 +86,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     }
   });
 
-  test('Verify that the form can\'t be submitted multiple times by rapid succession of clicks on the Submit button', async ({ page }) => {
+  test('Verify that the form can\'t be submitted multiple times by rapid succession of clicks on the Submit button', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -96,7 +116,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('Form submission is prevented after the first click.');
   });
 
-  test('Verify that the form includes a honeypot or a captcha to make the form less susceptible to bots', async ({ page }) => {
+  test('Verify that the form includes a honeypot or a captcha to make the form less susceptible to bots', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -118,7 +139,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     await submitButton.click();
   });
 
-  test('Verify that a confirmation message is displayed when the form is submitted', async ({ page }) => {
+  test('Verify that a confirmation message is displayed when the form is submitted', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -148,7 +170,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('Confirmation message is displayed successfully.');
   });
 
-  test('Verify form submission is recorded in the CMS', async ({ page }) => {
+  test('Verify form submission is recorded in the CMS', async () => {
+    const page = await context.newPage();
     console.log('Navigating to the WordPress admin login page...');
     await page.goto('https://colmetweb.wpenginepowered.com/wp-login.php?redirect_to=https%3A%2F%2Fcolmetweb.wpenginepowered.com%2Fwp-admin%2F&reauth=1');
 
