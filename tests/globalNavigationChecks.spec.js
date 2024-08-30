@@ -169,7 +169,6 @@ test.describe('Global Navigation Checks - Automated', () => {
       }
     }
   
-    // Verify the presence of social media links
     const socialLinks = [
       { selector: 'a[href="https://www.facebook.com/colmetsteel/"]', name: 'Facebook' },
       { selector: 'a[href="https://www.instagram.com/colmetsteel/"]', name: 'Instagram' },

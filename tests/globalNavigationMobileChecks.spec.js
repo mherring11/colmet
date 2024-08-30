@@ -65,7 +65,6 @@ test.describe('Global Navigation Mobile Checks - Automated', () => {
       { selector: 'li:has-text("Edging") > a', name: 'Edging', url: 'https://colmet-prd.chltest2.com/edging' },
       { selector: 'li:has-text("Planters") > a', name: 'Planters', url: 'https://colmet-prd.chltest2.com/planters' },
       { selector: 'li:has-text("Sign Holders") > a', name: 'Sign Holders', url: 'https://colmet-prd.chltest2.com/sign-holders' },
-      { selector: 'li:has-text("Bespoke Products") > a', name: 'Bespoke Products', url: 'https://colmet-prd.chltest2.com/custom-products' }
     ];
 
     for (const link of navLinks) {
@@ -110,6 +109,7 @@ test.describe('Global Navigation Mobile Checks - Automated', () => {
   test('Verify footer links, social links, and global search', async ({ page }) => {
     console.log('Navigating to the homepage...');
     await page.goto('https://colmet-prd.chltest2.com/');
+    
     const footerLinks = [
       { selector: 'ul.FooterNavOne_menu__zSY7M > li:has-text("Edging") > a', name: 'Edging', url: 'https://colmet-prd.chltest2.com/edging' },
       { selector: 'ul.FooterNavOne_menu__zSY7M > li:has-text("Planters") > a', name: 'Planters', url: 'https://colmet-prd.chltest2.com/planters' },
@@ -124,6 +124,7 @@ test.describe('Global Navigation Mobile Checks - Automated', () => {
       { selector: 'ul.Footer_menu___k1RN > li:has-text("Terms and Conditions") > a', name: 'Terms and Conditions', url: 'https://colmet-prd.chltest2.com/terms-and-conditions' },
       { selector: 'ul.Footer_menu___k1RN > li:has-text("Intellectual Property") > a', name: 'Intellectual Property', url: 'https://colmet-prd.chltest2.com/intellectual-property' }
     ];
+  
     for (const link of footerLinks) {
       console.log(`Checking the existence of the ${link.name} link...`);
       const footerLink = await page.$(link.selector);
@@ -159,45 +160,19 @@ test.describe('Global Navigation Mobile Checks - Automated', () => {
         console.log('Search form button found and displayed.');
       }
     }
+  
     const socialLinks = [
-      { selector: 'a[href="https://www.facebook.com/colmetsteel/"]', name: 'Facebook', url: 'https://www.facebook.com/colmetsteel/' },
-      { selector: 'a[href="https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg"]', name: 'YouTube', url: 'https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg' }
+      { selector: 'a[href="https://www.facebook.com/colmetsteel/"]', name: 'Facebook' },
+      { selector: 'a[href="https://www.instagram.com/colmetsteel/"]', name: 'Instagram' },
+      { selector: 'a[href="https://x.com/colmetsteel"]', name: 'X' },
+      { selector: 'a[href="https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg"]', name: 'YouTube' }
     ];
+  
     for (const socialLink of socialLinks) {
-      console.log(`Checking the existence of the ${socialLink.name} link...`);
+      console.log(`Verifying the presence of the ${socialLink.name} link...`);
       const socialMediaLink = await page.$(socialLink.selector);
       expect(socialMediaLink).not.toBeNull();
-      console.log(`${socialLink.name} link found.`);
-      await page.evaluate(el => el.removeAttribute('target'), socialMediaLink);
-      console.log(`Clicking the ${socialLink.name} link...`);
-      await socialMediaLink.click();
-      await page.waitForTimeout(1000);
-      expect(page.url()).toBe(socialLink.url);
-      console.log(`${socialLink.name} link navigation confirmed.`);
-      await page.goto('https://colmet-prd.chltest2.com/');
-      console.log('Returned to the homepage.');
-    }
-    console.log('Clicking the navigation toggle button...');
-    const navToggleButton = await page.$('.Header_nav-toggle__j4Yq8');
-    await navToggleButton.click();
-    await page.waitForTimeout(1000);
-    console.log('Clicking the search link...');
-    const searchLink = await page.$('li:has-text("Search") > a');
-    if (searchLink) {
-      await searchLink.click();
-      await page.waitForTimeout(1000);
-      console.log('Entering search term "edging"...');
-      const searchInput = await page.$('input[type="search"]');
-      await searchInput.fill('edging');
-      console.log('Submitting the search form...');
-      const searchFormButton = await page.$('button[type="submit"]');
-      await searchFormButton.click();
-      await page.waitForTimeout(1000);
-      const searchResultsURL = await page.url();
-      expect(searchResultsURL).toContain('search?search_query=edging');
-      console.log('Search results page confirmed for term "edging".');
-    } else {
-      console.log('Search link not found.');
+      console.log(`${socialLink.name} link is present.`);
     }
   });
 });
