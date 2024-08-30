@@ -16,7 +16,7 @@ test.describe('Full Mobile Test Suite', () => {
       fs.mkdirSync(screenshotsDir);
     }
 
-    await page.goto(fileUrl);
+    await page.goto(fileUrl, { waitUntil: 'networkidle' });
 
     const imageSelectors = [
       { selector: '#Homepage', name: 'Homepage_mobile' },
@@ -41,12 +41,13 @@ test.describe('Full Mobile Test Suite', () => {
 
     for (let i = 0; i < imageSelectors.length; i++) {
       const { selector, name } = imageSelectors[i];
-      const element = await page.$(selector);
+      const element = await page.waitForSelector(selector, { timeout: 10000 }).catch(() => null); // Wait for element with a timeout
+
       if (element) {
         await element.screenshot({ path: path.resolve(screenshotsDir, `${name}.png`) });
         console.log(`Screenshot of ${name} captured.`);
       } else {
-        console.log(`Element with selector ${selector} not found.`);
+        console.log(`Element with selector ${selector} not found or did not load in time.`);
       }
     }
   });
@@ -70,25 +71,36 @@ test.describe('Full Mobile Test Suite', () => {
         test(`Capture screenshot of ${pageInfo.name} at ${viewport.name} size`, async ({ page }) => {
           const baseDir = path.resolve(__dirname, '..', 'mobile_screenshots');
           const screenshotsDir = path.resolve(baseDir, `${pageInfo.name}_${viewport.name}`);
+  
           if (!fs.existsSync(baseDir)) {
             fs.mkdirSync(baseDir, { recursive: true });
           }
           if (!fs.existsSync(screenshotsDir)) {
             fs.mkdirSync(screenshotsDir, { recursive: true });
           }
-
-          await page.setViewportSize({ width: viewport.width, height: viewport.height });
-          await page.goto(pageInfo.url);
-
-          await page.waitForTimeout(2000);
-
-          const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
-          await page.screenshot({ path: screenshotPath, fullPage: true });
-          console.log(`Captured screenshot of ${pageInfo.name} at ${viewport.name} size`);
+  
+          try {
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+  
+            console.log(`Navigating to ${pageInfo.url} for ${viewport.name} size...`);
+            await page.goto(pageInfo.url, { waitUntil: 'networkidle' }); // Wait until no network connections for 500 ms
+  
+            // Wait for a specific element to ensure the page has settled
+            await page.waitForSelector('body', { timeout: 10000 }); // Example: Waiting for the body to load
+  
+            const screenshotPath = path.resolve(screenshotsDir, `${pageInfo.name}_${viewport.name}.png`);
+            await page.screenshot({ path: screenshotPath, fullPage: true });
+            console.log(`Captured screenshot of ${pageInfo.name} at ${viewport.name} size`);
+          } catch (error) {
+            console.error(`Error capturing screenshot of ${pageInfo.name} at ${viewport.name} size:`, error);
+            throw error; // Rethrow to ensure the test fails appropriately
+          }
         });
       }
     }
   });
+  
+  
 
   // Test 3: Compare mobile screenshots with provided mobile images
   const pagesToCompare = [
@@ -131,7 +143,6 @@ test.describe('Full Mobile Test Suite', () => {
   test.describe('Compare mobile screenshots with provided mobile images', () => {
     for (const pageInfo of pagesToCompare) {
       test(`Compare ${pageInfo.name} screenshot with provided image`, async () => {
-        
         const baseDir = path.resolve(__dirname, '..', 'mobile_screenshots');
         const websiteScreenshotsDir = path.resolve(baseDir, pageInfo.websiteImageFolder);
         const diffsDir = path.resolve(baseDir, 'diffs');

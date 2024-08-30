@@ -1,8 +1,7 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect, request } = require('@playwright/test');
 
 test.describe('Front-end Mobile Checks - Automated', () => {
-  test.use({ viewport: { width: 375, height: 812 } }); // iPhone X dimensions
-
+  test.use({ viewport: { width: 375, height: 812 } });
   test('Verify that the page includes a favicon and a page title', async ({ page }) => {
     console.log('Navigating to the homepage...');
     await page.goto('https://colmet-prd.chltest2.com/');
@@ -73,19 +72,22 @@ test.describe('Front-end Mobile Checks - Automated', () => {
   test('Verify that all page assets load smoothly and in a logical order', async ({ page }) => {
     console.log('Navigating to the homepage...');
     await page.goto('https://colmet-prd.chltest2.com/');
-    
+  
     const assets = await page.evaluate(() => {
       const images = Array.from(document.querySelectorAll('img'));
       return images.map(img => img.src);
     });
-
+  
+    const context = await request.newContext();
+  
     for (const asset of assets) {
       console.log(`Checking asset: ${asset}`);
-      const response = await page.goto(asset);
+      const response = await context.get(asset);
       expect(response.status()).toBe(200);
       console.log(`Asset ${asset} loaded successfully.`);
     }
-
+  
     console.log('All page assets loaded smoothly and in a logical order.');
   });
+  
 });

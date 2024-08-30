@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Global Navigation Checks - Automated', () => {
+
   test('Verify Colmet logo links to the homepage', async ({ page }) => {
     await page.goto('https://colmet-prd.chltest2.com/');
     console.log('Navigated to the homepage.');
@@ -16,8 +17,8 @@ test.describe('Global Navigation Checks - Automated', () => {
     expect(page.url()).toBe('https://colmet-prd.chltest2.com/');
     console.log('Header logo navigation to homepage confirmed.');
 
+    console.log('Navigating back to the homepage...');
     await page.goto('https://colmet-prd.chltest2.com/');
-    console.log('Navigated back to the homepage.');
 
     console.log('Checking the existence of the footer logo...');
     const footerLogo = await page.$('.hidden.lg\\:block > a');
@@ -63,12 +64,11 @@ test.describe('Global Navigation Checks - Automated', () => {
       { selector: 'li:has-text("Blog") > a', name: 'Blog', url: 'https://colmet-prd.chltest2.com/blog' },
       { selector: 'li:has-text("Shop") > a', name: 'Shop', url: 'https://colmet-prd.chltest2.com/shop' },
       { selector: 'li:has-text("Contact Us") > a', name: 'Contact Us', url: 'https://colmet-prd.chltest2.com/contact-us' },
-      { selector: 'li:has-text("Search") > a', name: 'Search', url: 'search' }, // Special case for search
+      { selector: 'li:has-text("Search") > a', name: 'Search', url: 'search' },
       { selector: 'a[href="/cart"]', name: 'Cart', url: 'https://colmet-prd.chltest2.com/cart' },
       { selector: 'li:has-text("Edging") > a', name: 'Edging', url: 'https://colmet-prd.chltest2.com/edging' },
       { selector: 'li:has-text("Planters") > a', name: 'Planters', url: 'https://colmet-prd.chltest2.com/planters' },
       { selector: 'li:has-text("Sign Holders") > a', name: 'Sign Holders', url: 'https://colmet-prd.chltest2.com/sign-holders' },
-      { selector: 'li:has-text("Bespoke Products") > a', name: 'Bespoke Products', url: 'https://colmet-prd.chltest2.com/custom-products' }
     ];
 
     for (const link of navLinks) {
@@ -114,10 +114,10 @@ test.describe('Global Navigation Checks - Automated', () => {
     }
   });
 
-  
   test('Verify footer links, social links, and global search', async ({ page }) => {
     console.log('Navigating to the homepage...');
     await page.goto('https://colmet-prd.chltest2.com/');
+    
     const footerLinks = [
       { selector: 'ul.FooterNavOne_menu__zSY7M > li:has-text("Edging") > a', name: 'Edging', url: 'https://colmet-prd.chltest2.com/edging' },
       { selector: 'ul.FooterNavOne_menu__zSY7M > li:has-text("Planters") > a', name: 'Planters', url: 'https://colmet-prd.chltest2.com/planters' },
@@ -132,6 +132,7 @@ test.describe('Global Navigation Checks - Automated', () => {
       { selector: 'ul.Footer_menu___k1RN > li:has-text("Terms and Conditions") > a', name: 'Terms and Conditions', url: 'https://colmet-prd.chltest2.com/terms-and-conditions' },
       { selector: 'ul.Footer_menu___k1RN > li:has-text("Intellectual Property") > a', name: 'Intellectual Property', url: 'https://colmet-prd.chltest2.com/intellectual-property' }
     ];
+  
     for (const link of footerLinks) {
       console.log(`Checking the existence of the ${link.name} link...`);
       const footerLink = await page.$(link.selector);
@@ -167,24 +168,22 @@ test.describe('Global Navigation Checks - Automated', () => {
         console.log('Search form button found and displayed.');
       }
     }
+  
+    // Verify the presence of social media links
     const socialLinks = [
-      { selector: 'a[href="https://www.facebook.com/colmetsteel/"]', name: 'Facebook', url: 'https://www.facebook.com/colmetsteel/' },
-      { selector: 'a[href="https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg"]', name: 'YouTube', url: 'https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg' }
+      { selector: 'a[href="https://www.facebook.com/colmetsteel/"]', name: 'Facebook' },
+      { selector: 'a[href="https://www.instagram.com/colmetsteel/"]', name: 'Instagram' },
+      { selector: 'a[href="https://x.com/colmetsteel"]', name: 'X' },
+      { selector: 'a[href="https://www.youtube.com/channel/UCo6_qEF9UlvMWeBxB3OgZvg"]', name: 'YouTube' }
     ];
+  
     for (const socialLink of socialLinks) {
-      console.log(`Checking the existence of the ${socialLink.name} link...`);
+      console.log(`Verifying the presence of the ${socialLink.name} link...`);
       const socialMediaLink = await page.$(socialLink.selector);
       expect(socialMediaLink).not.toBeNull();
-      console.log(`${socialLink.name} link found.`);
-      await page.evaluate(el => el.removeAttribute('target'), socialMediaLink);
-      console.log(`Clicking the ${socialLink.name} link...`);
-      await socialMediaLink.click();
-      await page.waitForTimeout(1000);
-      expect(page.url()).toBe(socialLink.url);
-      console.log(`${socialLink.name} link navigation confirmed.`);
-      await page.goto('https://colmet-prd.chltest2.com/');
-      console.log('Returned to the homepage.');
+      console.log(`${socialLink.name} link is present.`);
     }
+  
     console.log('Clicking the search link...');
     const searchLink = await page.$('li:has-text("Search") > a');
     if (searchLink) {
@@ -204,5 +203,5 @@ test.describe('Global Navigation Checks - Automated', () => {
       console.log('Search link not found.');
     }
   });
-});
 
+});

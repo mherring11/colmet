@@ -1,25 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
-let browser;
-let context;
-
 test.describe('Contact Us Form - Required Fields Check', () => {
 
-  test.beforeAll(async () => {
-  
-    browser = await require('playwright').chromium.launch({
-      headless: false,
-      args: ['--disable-features=BlockThirdPartyCookies'],
-    });
-
-    context = await browser.newContext();
-  });
-
-  test.afterAll(async () => {
-  });
-
-  test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async () => {
-    const page = await context.newPage();
+  test('Verify that required fields are indicated with an asterisk and "* Indicates a required field" text is present', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -43,8 +26,7 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('"* Indicates a required field" text is present.');
   });
 
-  test('Verify that the Name field name appears to the left of the form field', async () => {
-    const page = await context.newPage();
+  test('Verify that the Name field name appears to the left of the form field', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -60,24 +42,22 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('The Name field name appears to the left of the form field.');
   });
 
-  test('Verify that the form contains validation messages for required fields', async () => {
-    const page = await context.newPage();
+  test('Verify that the form contains validation messages for required fields', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
-
+  
     console.log('Clicking the Submit button to trigger validation messages...');
     const submitButton = await page.$('button[type="submit"].btn');
     await submitButton.click();
-
+  
     const validationMessages = [
       { label: 'First Name is required', selector: 'span.text-maroon:has-text("First Name is required")' },
+      { label: 'Last Name is required', selector: 'span.text-maroon:has-text("Last Name is required")' },
       { label: 'Email is required', selector: 'span.text-maroon:has-text("Email is required")' },
-      { label: 'Phone is required', selector: 'span.text-maroon:has-text("Phone is required")' },
-      { label: 'Company name is required', selector: 'span.text-maroon:has-text("Company name is required")' },
       { label: 'Select option is required', selector: 'span.text-maroon:has-text("Select option is required")' },
       { label: 'Message is required', selector: 'span.text-maroon:has-text("Message is required")' }
     ];
-
+  
     for (const message of validationMessages) {
       console.log(`Checking for validation message: ${message.label}...`);
       const validationMessage = await page.$(message.selector);
@@ -85,9 +65,9 @@ test.describe('Contact Us Form - Required Fields Check', () => {
       console.log(`Validation message for "${message.label}" is present.`);
     }
   });
+  
 
-  test('Verify that the form can\'t be submitted multiple times by rapid succession of clicks on the Submit button', async () => {
-    const page = await context.newPage();
+  test('Verify that the form can\'t be submitted multiple times by rapid succession of clicks on the Submit button', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -116,8 +96,7 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('Form submission is prevented after the first click.');
   });
 
-  test('Verify that the form includes a honeypot or a captcha to make the form less susceptible to bots', async () => {
-    const page = await context.newPage();
+  test('Verify that the form includes a honeypot or a captcha to make the form less susceptible to bots', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -139,8 +118,7 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     await submitButton.click();
   });
 
-  test('Verify that a confirmation message is displayed when the form is submitted', async () => {
-    const page = await context.newPage();
+  test('Verify that a confirmation message is displayed when the form is submitted', async ({ page }) => {
     console.log('Navigating to the Contact Us page...');
     await page.goto('https://colmet-prd.chltest2.com/contact-us');
 
@@ -170,10 +148,9 @@ test.describe('Contact Us Form - Required Fields Check', () => {
     console.log('Confirmation message is displayed successfully.');
   });
 
-  test('Verify form submission is recorded in the CMS', async () => {
-    const page = await context.newPage();
+  test('Verify form submission is recorded in the CMS', async ({ page }) => {
     console.log('Navigating to the WordPress admin login page...');
-    await page.goto('https://colmetweb.wpenginepowered.com/wp-login.php?redirect_to=https%3A%2F%2Fcolmetweb.wpenginepowered.com%2Fwp-admin%2F&reauth=1');
+    await page.goto('https://cms.colmet.com/wp-login.php');
 
     console.log('Logging into the WordPress admin area...');
     await page.fill('input[name="log"]', 'mherring@clickherelabs.com');

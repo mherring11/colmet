@@ -53,9 +53,8 @@ test.describe('Contact Us Form - Required Fields Check', () => {
 
     const validationMessages = [
       { label: 'First Name is required', selector: 'span.text-maroon:has-text("First Name is required")' },
+      { label: 'Last Name is required', selector: 'span.text-maroon:has-text("Last Name is required")' },
       { label: 'Email is required', selector: 'span.text-maroon:has-text("Email is required")' },
-      { label: 'Phone is required', selector: 'span.text-maroon:has-text("Phone is required")' },
-      { label: 'Company name is required', selector: 'span.text-maroon:has-text("Company name is required")' },
       { label: 'Select option is required', selector: 'span.text-maroon:has-text("Select option is required")' },
       { label: 'Message is required', selector: 'span.text-maroon:has-text("Message is required")' }
     ];
@@ -151,7 +150,7 @@ test.describe('Contact Us Form - Required Fields Check', () => {
 
   test('Verify form submission is recorded in the CMS', async ({ page }) => {
     console.log('Navigating to the WordPress admin login page...');
-    await page.goto('https://colmetweb.wpenginepowered.com/wp-login.php?redirect_to=https%3A%2F%2Fcolmetweb.wpenginepowered.com%2Fwp-admin%2F&reauth=1');
+    await page.goto('https://cms.colmet.com/wp-login.php');
 
     console.log('Logging into the WordPress admin area...');
     await page.fill('input[name="log"]', 'mherring@clickherelabs.com');
