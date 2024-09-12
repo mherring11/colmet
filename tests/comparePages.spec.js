@@ -82,3 +82,4 @@ test.describe('Compare existing screenshots with provided images', () => {
     });
   }
 });
+
